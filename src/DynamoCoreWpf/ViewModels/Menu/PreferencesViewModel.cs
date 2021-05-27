@@ -884,7 +884,11 @@ namespace Dynamo.ViewModels
                 {
                     expanderActive = value;
                     OnPropertyChanged(nameof(ExpanderActive));
-                }          
+                }
+                else
+                {
+                    expanderActive = "";
+                }
             }
         }
     }
