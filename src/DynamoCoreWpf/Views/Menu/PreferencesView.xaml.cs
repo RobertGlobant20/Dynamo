@@ -196,6 +196,14 @@ namespace Dynamo.Wpf.Views
 
         private void AddStyleButton_Click(object sender, RoutedEventArgs e)
         {
+            var saveChangesButton = sender as Button;
+
+            //Get the Grid that contains the Stack Panel that also contains the info related to the new style
+            var grid = (saveChangesButton.Parent as Grid).Parent as Grid;
+
+            var groupNameLabel = grid.FindName("groupNameBox2") as TextBox;
+            groupNameLabel.Text = "hello crash";
+
             viewModel.IsVisibleAddStyleBorder = true;
             viewModel.IsEnabledAddStyleButton = false;
             groupNameBox.Focus();
