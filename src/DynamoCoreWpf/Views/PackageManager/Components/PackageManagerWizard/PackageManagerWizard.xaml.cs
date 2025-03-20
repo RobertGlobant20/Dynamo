@@ -114,6 +114,7 @@ namespace Dynamo.UI.Views
         private void LoadingDone()
         {
             CompatibilityMap();
+            SetLocale();
         }
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -840,6 +841,16 @@ namespace Dynamo.UI.Views
                 }
 
                 _disposed = true;
+            }
+        }
+
+        private async void SetLocale()
+        {
+            var userLocale = CultureInfo.CurrentCulture.Name;
+
+            if (dynWebView?.CoreWebView2 != null)
+            {
+                await dynWebView.CoreWebView2.ExecuteScriptAsync(@$"window.setLocale('{userLocale}');");
             }
         }
         #endregion
