@@ -1,4 +1,5 @@
 using CoreNodeModels;
+using Dynamo.Wpf.Properties;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
@@ -6,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Shapes;
 
 namespace Dynamo.Wpf.CurveMapper
 {
@@ -46,7 +48,7 @@ namespace Dynamo.Wpf.CurveMapper
                                  (1 - (controlPointData.Y / CanvasSize)) *
                                  (curveMapperNodeModel.MaxLimitY - curveMapperNodeModel.MinLimitY);
 
-                return $"Coordinates: ({scaledX:F2}, {scaledY:F2})";
+                return $"{CoreNodeModelWpfResources.CurveMapperControlPointCoordinatesLabel}: ({scaledX:F2}, {scaledY:F2})";
             }
         }
 
@@ -112,6 +114,18 @@ namespace Dynamo.Wpf.CurveMapper
                     e.PropertyName == nameof(curveMapperNodeModel.MaxLimitY))
                 {
                     RaisePropertyChanged(nameof(ScaledCoordinates));
+                }
+            };
+
+            // Find the tooltip once it's loaded
+            this.Loaded += (s, e) =>
+            {
+                if (this.Template.FindName("ControlPointEllipse", this) is Ellipse ellipse && ellipse.ToolTip is ToolTip tooltip)
+                {
+                    tooltip.Opened += (sender, args) =>
+                    {
+                        CenterTooltip(tooltip);
+                    };
                 }
             };
         }
@@ -187,6 +201,17 @@ namespace Dynamo.Wpf.CurveMapper
         /// </summary>
         private static void OnPropertyUpdated(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
+        }
+
+        private void CenterTooltip(ToolTip tooltip)
+        {
+            tooltip.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                tooltip.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                double actualWidth = tooltip.DesiredSize.Width;
+                tooltip.HorizontalOffset = -actualWidth / 2.0;
+            }),
+            System.Windows.Threading.DispatcherPriority.Loaded);
         }
     }
 }

@@ -117,6 +117,16 @@ namespace Dynamo.UI.Views
             SetLocale();
         }
 
+        private async void SetLocale()
+        {
+            var userLocale = CultureInfo.CurrentCulture.Name;
+
+            if (dynWebView?.CoreWebView2 != null)
+            {
+                await dynWebView.CoreWebView2.ExecuteScriptAsync(@$"window.setLocale('{userLocale}');");
+            }
+        }
+
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             if (_onlyLoadOnce) return;
