@@ -117,3 +117,11 @@ dynamods-splash-screen-*.tgz
 /src/DynamoCoreWpf/.npmrc
 /src/Notifications/.npmrc
 src/LibraryViewExtensionWebView2/.npmrc
+
+# Localized HTML Files - copied from  Dynamo\doc\distrib\html #
+/src/DocumentationBrowserViewExtensionDocs
+/src/DynamoCoreWpf/Controls/Docs
+/src/DynamoCoreWpf/Views/GuidedTour/HtmlPages
+/src/LintingViewExtension/Docs
+/src/Libraries/PythonNodeModels/Docs
+/src/DynamoCoreWpf/ViewModels/PackageManager/Docs
