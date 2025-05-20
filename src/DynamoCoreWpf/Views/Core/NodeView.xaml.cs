@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -124,11 +125,61 @@ namespace Dynamo.Controls
             Loaded += OnNodeViewLoaded;
             Unloaded += OnNodeViewUnloaded;
             inputGrid.Loaded += NodeViewReady;
+            SizeChanged += NodeView_SizeChanged;
 
             nodeBorder.SizeChanged += OnSizeChanged;
             DataContextChanged += OnDataContextChanged;
 
             Panel.SetZIndex(this, 1);
+        }
+
+        private void NodeView_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var nodeView = (sender as NodeView);
+            var nodeName = "";
+            if(nodeView != null)
+            {
+                nodeName = (nodeView.DataContext as NodeViewModel).OriginalName;
+            }
+            using (FileStream aFile = new FileStream(@"C:\temp\NodeView_SizeChanged.txt", FileMode.Append))
+            using (StreamWriter sw = new StreamWriter(aFile))
+            {
+                sw.WriteLine(String.Format("NodeView: {0} Changed prev:{1},{2}, new:{3},{4}", nodeName, e.PreviousSize.Width, e.PreviousSize.Height, e.NewSize.Width, e.NewSize.Height));
+            }
+        }
+
+        protected override Size ArrangeOverride(Size finalSize)
+        {
+            var nodeView = (this as NodeView);
+            var nodeName = "";
+            if (nodeView != null)
+            {
+                nodeName = (nodeView.DataContext as NodeViewModel).OriginalName;
+            }
+
+            using (FileStream aFile = new FileStream(@"C:\temp\NodeView_MeasureArrangeOverride.txt", FileMode.Append))
+            using (StreamWriter sw = new StreamWriter(aFile))
+            {
+                sw.WriteLine(String.Format("{0} ArrangeOverride:{1},{2}", nodeName, finalSize.Width, finalSize.Height));
+            }
+            return base.ArrangeOverride(finalSize);
+        }
+
+        protected override Size MeasureOverride(Size availableSize)
+        {
+            var nodeView = (this as NodeView);
+            var nodeName = "";
+            if (nodeView != null)
+            {
+                nodeName = (nodeView.DataContext as NodeViewModel).OriginalName;
+            }
+
+            using (FileStream aFile = new FileStream(@"C:\temp\NodeView_MeasureArrangeOverride.txt", FileMode.Append))
+            using (StreamWriter sw = new StreamWriter(aFile))
+            {
+                sw.WriteLine(String.Format("{0} MeasureOverride", nodeName));
+            }
+            return base.MeasureOverride(availableSize);
         }
 
         private void OnNodeViewUnloaded(object sender, RoutedEventArgs e)
