@@ -156,11 +156,12 @@ namespace Dynamo.Controls
             {
                 nodeName = (nodeView.DataContext as NodeViewModel).OriginalName;
             }
-
-            using (FileStream aFile = new FileStream(@"C:\temp\NodeView_MeasureArrangeOverride.txt", FileMode.Append))
+                
+            using (FileStream aFile = new FileStream(@"C:\temp\NodeView_MeasureArrangeOverride.csv", FileMode.Append))
             using (StreamWriter sw = new StreamWriter(aFile))
             {
-                sw.WriteLine(String.Format("{0} ArrangeOverride:{1},{2}", nodeName, finalSize.Width, finalSize.Height));
+                var timeMiliseconds = DateTime.Now.ToString("hh:mm:ss.fff");
+                sw.WriteLine(String.Format("{0}, {1}x{2}, {3}", nodeName, finalSize.Width, finalSize.Height, timeMiliseconds));
             }
             return base.ArrangeOverride(finalSize);
         }
@@ -174,10 +175,13 @@ namespace Dynamo.Controls
                 nodeName = (nodeView.DataContext as NodeViewModel).OriginalName;
             }
 
-            using (FileStream aFile = new FileStream(@"C:\temp\NodeView_MeasureArrangeOverride.txt", FileMode.Append))
+
+
+            using (FileStream aFile = new FileStream(@"C:\temp\NodeView_MeasureArrangeOverride.csv", FileMode.Append))
             using (StreamWriter sw = new StreamWriter(aFile))
             {
-                sw.WriteLine(String.Format("{0} MeasureOverride", nodeName));
+                var timeMiliseconds = DateTime.Now.ToString("hh:mm:ss.fff");
+                sw.WriteLine(String.Format("{0}, MeasureOverride, {1}", nodeName, timeMiliseconds));
             }
             return base.MeasureOverride(availableSize);
         }

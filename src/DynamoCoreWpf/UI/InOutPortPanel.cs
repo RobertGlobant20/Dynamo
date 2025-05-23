@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
@@ -43,6 +44,13 @@ namespace Dynamo.UI.Controls
                 }
             }
 
+            //using (FileStream aFile = new FileStream(@"C:\temp\NodeView_MeasureArrangeOverride.csv", FileMode.Append))
+            //using (StreamWriter sw = new StreamWriter(aFile))
+            //{
+            //    var timeMiliseconds = DateTime.Now.ToString("hh:mm:ss.fff");
+            //    sw.WriteLine(String.Format("Port ArrangeOverride:{0}x{1}, {2}", arrangeSize.Width, arrangeSize.Height, timeMiliseconds));
+            //}
+
             return base.ArrangeOverride(arrangeSize);
         }
 
@@ -83,6 +91,12 @@ namespace Dynamo.UI.Controls
                 Analytics.TrackException(aggException, false);
             }
 
+            //using (FileStream aFile = new FileStream(@"C:\temp\NodeView_MeasureArrangeOverride.csv", FileMode.Append))
+            //using (StreamWriter sw = new StreamWriter(aFile))
+            //{
+            //    var timeMiliseconds = DateTime.Now.ToString("hh:mm:ss.fff");
+            //    sw.WriteLine(String.Format("Port MeasureOverride, {0}", timeMiliseconds));
+            //}
 
             return cumulative;
         }
