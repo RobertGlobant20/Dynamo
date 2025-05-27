@@ -6,11 +6,12 @@
              xmlns:dynui="clr-namespace:Dynamo.UI.Controls"
              xmlns:p="clr-namespace:Dynamo.Wpf.Properties"
              xmlns:dp="clr-namespace:Dynamo.Properties;assembly=DynamoCore"
+             xmlns:converters="clr-namespace:Dynamo.Controls"
              xmlns:controls="clr-namespace:Dynamo.Views"
              xmlns:fa="clr-namespace:FontAwesome5;assembly=FontAwesome5.Net" xmlns:dp1="clr-namespace:Dynamo.Properties;assembly=DynamoCore"
              Name="topControl"
              Width="250"
-             Height="200"
+             Height="250"
              x:FieldModifier="public"
              MouseEnter="OnNodeViewMouseEnter"
              MouseLeave="OnNodeViewMouseLeave"
@@ -19,7 +20,9 @@
              PreviewMouseLeftButtonDown="OnPreviewMouseLeftButtonDown"
              PreviewMouseMove="OnNodeViewMouseMove"
              Visibility="{Binding IsHidden, Converter={StaticResource InverseBoolToVisibilityConverter}}">
-
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
 
     <Grid Name="grid"
           HorizontalAlignment="Left"    
@@ -27,17 +30,17 @@
           ContextMenuService.IsEnabled="false"
           Visibility="{Binding IsCollapsed, Converter={StaticResource InverseBoolToVisibilityConverter}}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" MinHeight="24" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" MinHeight="24" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" MinWidth="10" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <!--  CONTEXT MENU  -->
@@ -286,7 +289,7 @@
                                     <TextBlock FontFamily="{StaticResource ArtifaktElementRegular}"
                                                FontWeight="Light"
                                                TextWrapping="Wrap"
-                                               Visibility="{Binding IsCustomFunction, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}">
+                                               Visibility="{Binding IsCustomFunction, Converter={StaticResource BoolToVisibilityConverter}}">
                                         <Run Text="{x:Static p:Resources.NodeTooltipPackage}" />
                                         <Run Text="{Binding Path=PackageName, Mode=OneWay}" />
                                     </TextBlock>
@@ -345,12 +348,14 @@
                 </Rectangle.Style>
             </Rectangle>
 
-            <TextBlock Name="NameBlock"
+            <Border BorderBrush="Red" BorderThickness="1">
+                <TextBlock Name="NameBlock"
                        Margin="6,3,6,0"
                        VerticalAlignment="Center"
                        Background="{x:Null}"
                        FontFamily="{StaticResource ArtifaktElementRegular}"
                        FontSize="16px"
+                       Width="200"
                        FontWeight="Medium"
                        Foreground="{StaticResource PrimaryCharcoal200Brush}"
                        IsHitTestVisible="False"
@@ -358,6 +363,7 @@
                        Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                        Visibility="Visible"
                        TextAlignment="Center" />
+           </Border>
             <TextBox Name="EditableNameBox"
                      Margin="6,3,6,0"
                      VerticalAlignment="Center"
@@ -385,7 +391,7 @@
                          Height="8"
                          Margin="0,2,6,0"
                          Fill="{StaticResource Blue300Brush}"
-                         Visibility="Visible" />
+                         Visibility="{Binding IsRenamed, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 <Grid.ToolTip>
                     <dynui:DynamoToolTip AttachmentSide="Top" Style="{DynamicResource ResourceKey=SLightToolTip}">
                         <Grid>
@@ -402,8 +408,9 @@
             </Grid>
         </DockPanel>
 
-        <Grid Visibility="Collapsed">
 
+       
+            
         <!--  INPUT PORTS  -->
         <ItemsControl Name="inputPortControl"
                       Grid.Row="2"
@@ -415,16 +422,18 @@
                       ItemsSource="{Binding Path=InPorts}"
                       Style="{Binding Path=NodeModel, Converter={StaticResource NodeModelToPortStyleConverter}}" />
 
-        <!--  OUTPUT PORTS  -->
+            <!--  OUTPUT PORTS  -->
         <ItemsControl Name="outputPortControl"
                       Grid.Row="2"
                       Grid.Column="2"
+                      Height="150"
+                      Width="150"
                       Margin="{Binding OriginalName, Converter={StaticResource NodeOriginalNameToMarginConverter}}"
                       VerticalAlignment="Top"
                       HorizontalContentAlignment="Stretch"
                       Canvas.ZIndex="4"
                       ItemsSource="{Binding Path=OutPorts}"
-                      Style="{Binding Path=NodeModel, Converter={StaticResource NodeModelToPortStyleConverter}}" />
+                      Style="{Binding Path=NodeModel, Converter={StaticResource NodeModelToPortStyleConverter}}" />    
 
         <Grid Name="centralGrid"
               Grid.Row="2"
@@ -461,7 +470,7 @@
                     FlowDirection="LeftToRight"
                     Orientation="Horizontal">
             <Grid x:Name="ExperimentalGlyph" 
-                  Visibility="{Binding Path=IsExperimental, Converter={StaticResource BooleanToVisibilityCollapsedConverter}, Mode=OneWay}">
+                  Visibility="{Binding Path=IsExperimental, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
                 <fa:ImageAwesome Icon="Solid_Flask"
                                  Width="16px"
                                  Height="16px"
@@ -474,7 +483,7 @@
                 </fa:ImageAwesome>
             </Grid>
             <Grid x:Name="FrozenGlyph" 
-                  Visibility="{Binding Path=IsFrozen, Converter={StaticResource BooleanToVisibilityCollapsedConverter}, Mode=OneWay}">
+                  Visibility="{Binding Path=IsFrozen, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
                 <Image x:Name="FrozenImage"
                        Width="16px"
                        Height="16px"
@@ -485,7 +494,7 @@
             </Grid>
             <!-- Node transient state indication, light sparkle -->
             <Grid x:Name="ClusterTransientGlyph" 
-                  Visibility="{Binding Path=IsTransient, Converter={StaticResource BooleanToVisibilityCollapsedConverter}, Mode=OneWay}">
+                  Visibility="{Binding Path=IsTransient, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
                 <Image x:Name="TransientImage"
                        Width="16px"
                        Height="16px"
@@ -555,7 +564,7 @@
                     Background="Transparent"
                     BorderThickness="0"
                     IsHitTestVisible="False"
-                    Visibility="{Binding Path=NodeModel.IsResizable, Converter={StaticResource BooleanToVisibilityCollapsedConverter}, Mode=OneWay}">
+                    Visibility="{Binding Path=NodeModel.IsResizable, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
             </Border>
             
             <!-- Button to open node context menu from lower right corner -->
@@ -640,7 +649,7 @@
                                   AncestorType={x:Type controls:WorkspaceView}}, 
                                   Converter={StaticResource ZoomToOpacityConverter}}"
                 Style="{Binding Path=DataContext.NodeCountOptimizationEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:WorkspaceView}}, Converter={StaticResource SZoomFadeOutPreview}}"
-                Visibility="{Binding Path=IsFrozen, Converter={StaticResource BooleanToVisibilityCollapsedConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                Visibility="{Binding Path=IsFrozen, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <!--  Displays when the node cluster is Preivew state and Zoom is above 0.4 -->
         <Border Name="nodeTransientColorOverlayZoomIn"
@@ -657,7 +666,7 @@
                                   AncestorType={x:Type controls:WorkspaceView}}, 
                                   Converter={StaticResource ZoomToOpacityConverter}}"
                 Style="{Binding Path=DataContext.NodeCountOptimizationEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:WorkspaceView}}, Converter={StaticResource SZoomFadeOutPreview}}"
-                Visibility="{Binding Path=IsTransient, Converter={StaticResource BooleanToVisibilityCollapsedConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                Visibility="{Binding Path=IsTransient, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <!--  Displays when the node is Frozen/Warning/Error state and Zoom is below 0.4 -->
         <Border Name="nodeColorOverlayZoomOut"
@@ -804,8 +813,6 @@
             </Rectangle.Visibility>
         </Rectangle>-->
 
-        </Grid>
-
         <!--  Warning Bar: Displays when node is in Info/Warning/Error state  -->
         <Rectangle Name="warningBar"
                    Grid.Row="4"
@@ -814,7 +821,7 @@
                    Height="12"
                    Canvas.ZIndex="1"
                    Fill="{Binding WarningBarColor, UpdateSourceTrigger=PropertyChanged}"
-                   Visibility="Visible" />
+                   Visibility="{Binding NodeWarningBarVisible, Converter={StaticResource BoolToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}" />
 
         <Canvas Name="expansionBay"
                 Grid.Row="5"
@@ -828,14 +835,14 @@
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
                 ClipToBounds="False"
-                Visibility="{Binding ShowDebugASTs, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}">
+                Visibility="{Binding ShowDebugASTs, Converter={StaticResource BoolToVisibilityConverter}}">
             <Label HorizontalContentAlignment="Center" Content="{Binding ASTText}" />
 
         </Canvas>
          <Canvas Grid.Row="3" Canvas.ZIndex="51" 
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
-                Visibility="{Binding IsCustomFunction, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}">
+                Visibility="{Binding IsCustomFunction, Converter={StaticResource BoolToVisibilityConverter}}">
                 <Polygon Points="0,-15 15,0 0,0" Fill="#E3E3E3"/>
             </Canvas>
     </Grid>

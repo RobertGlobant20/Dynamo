@@ -1043,7 +1043,7 @@ namespace Dynamo.Controls
             var nodeViewImp = nodeView as NodeView;
             if (nodeViewImp != null)
             {
-                //nodeViewCustomizationLibrary.Apply(nodeViewImp);
+                nodeViewCustomizationLibrary.Apply(nodeViewImp);
             }
         }
 

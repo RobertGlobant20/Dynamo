@@ -774,40 +774,8 @@ namespace Dynamo.ViewModels
             }
         }
 
-        private double actualHeight;
-        private double actualWidth;
-        internal double ActualHeight
-        {
-            get
-            {
-                return actualHeight;
-            }
-            set
-            {
-                actualHeight = value;
-                using (FileStream aFile = new FileStream(@"C:\temp\height_info.txt", FileMode.Append))
-                using (StreamWriter sw = new StreamWriter(aFile))
-                {
-                    sw.WriteLine("actualHeight: " + actualHeight);
-                }
-            }
-        }
-        internal double ActualWidth
-        {
-            get
-            {
-                return actualWidth;
-            }
-            set
-            {
-                actualWidth = value;
-                using (FileStream aFile = new FileStream(@"C:\temp\width_info.txt", FileMode.Append))
-                using (StreamWriter sw = new StreamWriter(aFile))
-                {
-                    sw.WriteLine("actualWidth: " + actualHeight);
-                }
-            }
-        }
+        internal double ActualHeight { get; set; }
+        internal double ActualWidth { get; set; }
 
         /// <summary>
         /// Node description defined by the user.

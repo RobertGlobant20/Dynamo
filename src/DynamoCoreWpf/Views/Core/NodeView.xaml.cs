@@ -135,17 +135,17 @@ namespace Dynamo.Controls
 
         private void NodeView_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            var nodeView = (sender as NodeView);
-            var nodeName = "";
-            if(nodeView != null)
-            {
-                nodeName = (nodeView.DataContext as NodeViewModel).OriginalName;
-            }
-            using (FileStream aFile = new FileStream(@"C:\temp\NodeView_SizeChanged.txt", FileMode.Append))
-            using (StreamWriter sw = new StreamWriter(aFile))
-            {
-                sw.WriteLine(String.Format("NodeView: {0} Changed prev:{1},{2}, new:{3},{4}", nodeName, e.PreviousSize.Width, e.PreviousSize.Height, e.NewSize.Width, e.NewSize.Height));
-            }
+            //var nodeView = (sender as NodeView);
+            //var nodeName = "";
+            //if(nodeView != null)
+            //{
+            //    nodeName = (nodeView.DataContext as NodeViewModel).OriginalName;
+            //}
+            //using (FileStream aFile = new FileStream(@"C:\temp\NodeView_SizeChanged.txt", FileMode.Append))
+            //using (StreamWriter sw = new StreamWriter(aFile))
+            //{
+            //    sw.WriteLine(String.Format("NodeView: {0} Changed prev:{1},{2}, new:{3},{4}", nodeName, e.PreviousSize.Width, e.PreviousSize.Height, e.NewSize.Width, e.NewSize.Height));
+            //}
         }
 
         protected override Size ArrangeOverride(Size finalSize)
@@ -156,7 +156,7 @@ namespace Dynamo.Controls
             {
                 nodeName = (nodeView.DataContext as NodeViewModel).OriginalName;
             }
-                
+
             using (FileStream aFile = new FileStream(@"C:\temp\NodeView_MeasureArrangeOverride.csv", FileMode.Append))
             using (StreamWriter sw = new StreamWriter(aFile))
             {
