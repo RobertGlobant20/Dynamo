@@ -100,7 +100,7 @@ namespace Dynamo.UI.Controls
                     Content = Wpf.Properties.Resources.SignInButtonContentToolTip
                 };
 
-                // Retrieve the style from resources
+                // Retrieve the style from resources 
                 var style = (Style)TryFindResource("GenericToolTipLight");
                 if (style != null)
                 {
