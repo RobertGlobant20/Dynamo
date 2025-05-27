@@ -348,8 +348,7 @@
                 </Rectangle.Style>
             </Rectangle>
 
-            <Border BorderBrush="Red" BorderThickness="1">
-                <TextBlock Name="NameBlock"
+            <TextBlock Name="NameBlock"
                        Margin="6,3,6,0"
                        VerticalAlignment="Center"
                        Background="{x:Null}"
@@ -363,7 +362,6 @@
                        Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                        Visibility="Visible"
                        TextAlignment="Center" />
-           </Border>
             <TextBox Name="EditableNameBox"
                      Margin="6,3,6,0"
                      VerticalAlignment="Center"
@@ -383,7 +381,6 @@
             <Grid HorizontalAlignment="Right"
                   VerticalAlignment="Center"
                   Panel.ZIndex="5"
-                  Visibility="Collapsed"
                   Background="Transparent"
                   DockPanel.Dock="Right">
                 <Ellipse Name="nodeRenamedBlueDot"
@@ -407,10 +404,7 @@
                 </Grid.ToolTip>
             </Grid>
         </DockPanel>
-
-
-       
-            
+          
         <!--  INPUT PORTS  -->
         <ItemsControl Name="inputPortControl"
                       Grid.Row="2"
@@ -426,8 +420,6 @@
         <ItemsControl Name="outputPortControl"
                       Grid.Row="2"
                       Grid.Column="2"
-                      Height="150"
-                      Width="150"
                       Margin="{Binding OriginalName, Converter={StaticResource NodeOriginalNameToMarginConverter}}"
                       VerticalAlignment="Top"
                       HorizontalContentAlignment="Stretch"

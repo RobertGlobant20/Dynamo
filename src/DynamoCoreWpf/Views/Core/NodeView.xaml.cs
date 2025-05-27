@@ -125,27 +125,11 @@ namespace Dynamo.Controls
             Loaded += OnNodeViewLoaded;
             Unloaded += OnNodeViewUnloaded;
             inputGrid.Loaded += NodeViewReady;
-            SizeChanged += NodeView_SizeChanged;
 
             nodeBorder.SizeChanged += OnSizeChanged;
             DataContextChanged += OnDataContextChanged;
 
             Panel.SetZIndex(this, 1);
-        }
-
-        private void NodeView_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            //var nodeView = (sender as NodeView);
-            //var nodeName = "";
-            //if(nodeView != null)
-            //{
-            //    nodeName = (nodeView.DataContext as NodeViewModel).OriginalName;
-            //}
-            //using (FileStream aFile = new FileStream(@"C:\temp\NodeView_SizeChanged.txt", FileMode.Append))
-            //using (StreamWriter sw = new StreamWriter(aFile))
-            //{
-            //    sw.WriteLine(String.Format("NodeView: {0} Changed prev:{1},{2}, new:{3},{4}", nodeName, e.PreviousSize.Width, e.PreviousSize.Height, e.NewSize.Width, e.NewSize.Height));
-            //}
         }
 
         protected override Size ArrangeOverride(Size finalSize)
