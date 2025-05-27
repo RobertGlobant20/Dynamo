@@ -9,8 +9,8 @@
              xmlns:controls="clr-namespace:Dynamo.Views"
              xmlns:fa="clr-namespace:FontAwesome5;assembly=FontAwesome5.Net" xmlns:dp1="clr-namespace:Dynamo.Properties;assembly=DynamoCore"
              Name="topControl"
-             Width="Auto"
-             Height="Auto"
+             Width="250"
+             Height="200"
              x:FieldModifier="public"
              MouseEnter="OnNodeViewMouseEnter"
              MouseLeave="OnNodeViewMouseLeave"
@@ -22,7 +22,7 @@
 
 
     <Grid Name="grid"
-          HorizontalAlignment="Left"
+          HorizontalAlignment="Left"    
           x:FieldModifier="public"
           ContextMenuService.IsEnabled="false"
           Visibility="{Binding IsCollapsed, Converter={StaticResource InverseBoolToVisibilityConverter}}">
@@ -207,6 +207,7 @@
             </ContextMenu>
         </Grid.ContextMenu>
 
+        
         <!--  Graphical Styling of Custom Nodes  -->
         <Border Name="customNodeBorder0"
                 Grid.Row="0"
@@ -224,6 +225,8 @@
                          UpdateSourceTrigger="PropertyChanged" />
             </Border.Visibility>
         </Border>
+
+
         <Border Name="customNodeBorder1"
                 Grid.Row="0"
                 Grid.ColumnSpan="3"
@@ -351,7 +354,7 @@
                        FontWeight="Medium"
                        Foreground="{StaticResource PrimaryCharcoal200Brush}"
                        IsHitTestVisible="False"
-                       Style="{Binding Path=DataContext.NodeCountOptimizationEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:WorkspaceView}}, Converter={StaticResource SZoomFadeControl}}"
+                       Style="{Binding Path=DataContext.NodeCountOptimizationEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:WorkspaceView}}, Converter={StaticResource SZoomFadeControl}}"               
                        Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                        Visibility="Visible"
                        TextAlignment="Center" />
@@ -374,6 +377,7 @@
             <Grid HorizontalAlignment="Right"
                   VerticalAlignment="Center"
                   Panel.ZIndex="5"
+                  Visibility="Collapsed"
                   Background="Transparent"
                   DockPanel.Dock="Right">
                 <Ellipse Name="nodeRenamedBlueDot"
@@ -381,7 +385,7 @@
                          Height="8"
                          Margin="0,2,6,0"
                          Fill="{StaticResource Blue300Brush}"
-                         Visibility="{Binding IsRenamed, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                         Visibility="Visible" />
                 <Grid.ToolTip>
                     <dynui:DynamoToolTip AttachmentSide="Top" Style="{DynamicResource ResourceKey=SLightToolTip}">
                         <Grid>
@@ -397,6 +401,8 @@
                 </Grid.ToolTip>
             </Grid>
         </DockPanel>
+
+        <Grid Visibility="Collapsed">
 
         <!--  INPUT PORTS  -->
         <ItemsControl Name="inputPortControl"
@@ -798,6 +804,8 @@
             </Rectangle.Visibility>
         </Rectangle>-->
 
+        </Grid>
+
         <!--  Warning Bar: Displays when node is in Info/Warning/Error state  -->
         <Rectangle Name="warningBar"
                    Grid.Row="4"
@@ -806,7 +814,7 @@
                    Height="12"
                    Canvas.ZIndex="1"
                    Fill="{Binding WarningBarColor, UpdateSourceTrigger=PropertyChanged}"
-                   Visibility="{Binding NodeWarningBarVisible, Converter={StaticResource BooleanToVisibilityCollapsedConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                   Visibility="Visible" />
 
         <Canvas Name="expansionBay"
                 Grid.Row="5"
@@ -824,11 +832,11 @@
             <Label HorizontalContentAlignment="Center" Content="{Binding ASTText}" />
 
         </Canvas>
-        <Canvas Grid.Row="3" Canvas.ZIndex="51" 
+         <Canvas Grid.Row="3" Canvas.ZIndex="51" 
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Visibility="{Binding IsCustomFunction, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}">
-            <Polygon Points="0,-15 15,0 0,0" Fill="#E3E3E3"/>
-        </Canvas>
+                <Polygon Points="0,-15 15,0 0,0" Fill="#E3E3E3"/>
+            </Canvas>
     </Grid>
 </UserControl>
