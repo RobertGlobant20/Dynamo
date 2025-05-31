@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Xml;
 using Dynamo.Core;
@@ -164,28 +164,32 @@ namespace Dynamo.Graph
         /// <summary>
         /// The height of the object.
         /// </summary>
-        [JsonIgnore]
         public virtual double Height
         {
             get { return height; }
             set
             {
-                height = value;
-                //RaisePropertyChanged("Height");
+                if (value > 0)
+                {
+                    height = value;
+                    //RaisePropertyChanged("Height");
+                }              
             }
         }
 
         /// <summary>
         /// The width of the object.
         /// </summary>
-        [JsonIgnore]
         public virtual double Width
         {
             get { return width; }
             set
             {
-                width = value;
-                //RaisePropertyChanged("Width");
+                if (value > 0)
+                {
+                    width = value;
+                    //RaisePropertyChanged("Width");
+                }
             }
         }
 

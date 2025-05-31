@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -43,6 +44,7 @@ namespace Dynamo.Controls
         private int oldZIndex;
 
         private bool nodeWasClicked;
+
 
         public NodeView TopControl
         {
@@ -176,6 +178,45 @@ namespace Dynamo.Controls
             }
         }
 
+        protected override Size ArrangeOverride(Size finalSize)
+        {
+            var nodeView = (this as NodeView);
+            var nodeName = "";
+            if (nodeView != null)
+            {
+                nodeName = (nodeView.DataContext as NodeViewModel).OriginalName;
+            }
+
+            using (FileStream aFile = new FileStream(@"C:\temp\NodeView_MeasureArrangeOverride.csv", FileMode.Append))
+            using (StreamWriter sw = new StreamWriter(aFile))
+            {
+                var timeMiliseconds = DateTime.Now.ToString("hh:mm:ss.fff");
+                //sw.WriteLine(String.Format("{0}, ArrangeOverride {1}, {2}, {3}", nodeName, finalSize.Width, finalSize.Height, timeMiliseconds));
+                sw.WriteLine(String.Format("{0}, ArrangeOverride {1}", nodeName, timeMiliseconds));
+            }
+            return base.ArrangeOverride(finalSize);
+        }
+
+        protected override Size MeasureOverride(Size availableSize)
+        {
+            var nodeView = (this as NodeView);
+            var nodeName = "";
+            if (nodeView != null)
+            {
+                nodeName = (nodeView.DataContext as NodeViewModel).OriginalName;
+            }
+
+
+
+            using (FileStream aFile = new FileStream(@"C:\temp\NodeView_MeasureArrangeOverride.csv", FileMode.Append))
+            using (StreamWriter sw = new StreamWriter(aFile))
+            {
+                var timeMiliseconds = DateTime.Now.ToString("hh:mm:ss.fff");
+                sw.WriteLine(String.Format("{0}, MeasureOverride, {1}", nodeName, timeMiliseconds));
+            }
+            return base.MeasureOverride(availableSize);
+        }
+
         /// <summary>
         /// This event handler is called soon as the NodeViewModel is bound to this 
         /// NodeView, which happens way before OnNodeViewLoaded event is sent. 
@@ -197,6 +238,18 @@ namespace Dynamo.Controls
             if (null != ViewModel) return;
 
             ViewModel = e.NewValue as NodeViewModel;
+
+            //This code should be only executed when loading a graph is the node is being added to the workspace manually then the Width and Height should be auto-calculated.
+            //The default Width and Height values for nodes is 100
+            if (ViewModel.Width > 100 && ViewModel.Height > 100)
+            {
+                nodeBorder.Width = ViewModel.Width;
+                nodeBorder.Height = ViewModel.Height;
+                nodeBackground.Width = ViewModel.Width;
+
+            }
+            
+
             if (!ViewModel.PreferredSize.HasValue) return;
 
             var size = ViewModel.PreferredSize.Value;
@@ -851,5 +904,46 @@ namespace Dynamo.Controls
             e.Handled = true;
         }
 
+        private void topControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            //using (FileStream aFile = new FileStream(@"C:\temp\NodeView_TreeSize.csv", FileMode.Append))
+            //using (StreamWriter sw = new StreamWriter(aFile))
+            //{
+            //    var nodeView = (sender as NodeView);
+            //    var mainGrid = nodeView.ChildrenOfType<Grid>().FirstOrDefault();
+
+            //    sw.WriteLine(String.Format("{0}", (nodeView.DataContext as NodeViewModel).OriginalName));
+
+            //    foreach (var control in mainGrid.Children())
+            //    {
+            //        var uiElement = (control as FrameworkElement);
+            //        var typeOfElement = control.GetType().Name;
+            //        double width = 0;
+            //        double height = 0;
+            //        string name = string.Empty;
+            //        string visibility = string.Empty;
+            //        if (uiElement != null)
+            //        {
+            //            width = uiElement.ActualWidth;
+            //            height = uiElement.ActualHeight;
+            //            name = uiElement.Name;
+            //            visibility = uiElement.Visibility.ToString();
+
+            //        }
+            //        else
+            //            name = "no UIElement";
+
+            //        if (string.IsNullOrEmpty(name))
+            //            name = "empty";
+            //        sw.WriteLine(String.Format("{0} - {1}, {2},{3},{4} ", name, typeOfElement, visibility, width, height));
+            //    }
+            //}
+
+            if (e.NewSize != null && ViewModel != null)
+            {
+                ViewModel.Width = e.NewSize.Width;
+                ViewModel.Height = e.NewSize.Height;
+            }
+        }
     }
 }
