@@ -11,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.Xml.Linq;
 using Dynamo.Configuration;
 using Dynamo.Graph.Nodes;
 using Dynamo.Nodes;
