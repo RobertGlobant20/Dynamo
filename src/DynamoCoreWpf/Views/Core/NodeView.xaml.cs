@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Dynamo.Configuration;
 using Dynamo.Graph.Nodes;
+using Dynamo.Nodes;
 using Dynamo.Selection;
 using Dynamo.UI;
 using Dynamo.UI.Controls;
@@ -180,40 +182,44 @@ namespace Dynamo.Controls
 
         protected override Size ArrangeOverride(Size finalSize)
         {
-            var nodeView = (this as NodeView);
-            var nodeName = "";
-            if (nodeView != null)
-            {
-                nodeName = (nodeView.DataContext as NodeViewModel).OriginalName;
-            }
+            //var nodeView = (this as NodeView);
+            //var nodeName = "";
+            //var id = "";
+            //if (nodeView != null)
+            //{
+            //    nodeName = (nodeView.DataContext as NodeViewModel).OriginalName;
+            //    id = (nodeView.DataContext as NodeViewModel).NodeModel.GUID.ToString();
+            //}
 
-            using (FileStream aFile = new FileStream(@"C:\temp\NodeView_MeasureArrangeOverride.csv", FileMode.Append))
-            using (StreamWriter sw = new StreamWriter(aFile))
-            {
-                var timeMiliseconds = DateTime.Now.ToString("hh:mm:ss.fff");
-                //sw.WriteLine(String.Format("{0}, ArrangeOverride {1}, {2}, {3}", nodeName, finalSize.Width, finalSize.Height, timeMiliseconds));
-                sw.WriteLine(String.Format("{0}, ArrangeOverride {1}", nodeName, timeMiliseconds));
-            }
+            //using (FileStream aFile = new FileStream(@"C:\temp\NodeView_MeasureArrangeOverride.csv", FileMode.Append))
+            //using (StreamWriter sw = new StreamWriter(aFile))
+            //{
+            //    var timeMiliseconds = DateTime.Now.ToString("hh:mm:ss.fff");
+            //    //sw.WriteLine(String.Format("{0}, ArrangeOverride {1}, {2}, {3}", nodeName, finalSize.Width, finalSize.Height, timeMiliseconds));
+            //    sw.WriteLine(String.Format("{0}, {1}, ArrangeOverride, {2}", nodeName, id, timeMiliseconds));
+            //}
             return base.ArrangeOverride(finalSize);
         }
 
         protected override Size MeasureOverride(Size availableSize)
         {
-            var nodeView = (this as NodeView);
-            var nodeName = "";
-            if (nodeView != null)
-            {
-                nodeName = (nodeView.DataContext as NodeViewModel).OriginalName;
-            }
+            //var nodeView = (this as NodeView);
+            //var nodeName = "";
+            //var id = "";
+            //if (nodeView != null)
+            //{
+            //    nodeName = (nodeView.DataContext as NodeViewModel).OriginalName;
+            //    id = (nodeView.DataContext as NodeViewModel).NodeModel.GUID.ToString();
+            //}
 
 
 
-            using (FileStream aFile = new FileStream(@"C:\temp\NodeView_MeasureArrangeOverride.csv", FileMode.Append))
-            using (StreamWriter sw = new StreamWriter(aFile))
-            {
-                var timeMiliseconds = DateTime.Now.ToString("hh:mm:ss.fff");
-                sw.WriteLine(String.Format("{0}, MeasureOverride, {1}", nodeName, timeMiliseconds));
-            }
+            //using (FileStream aFile = new FileStream(@"C:\temp\NodeView_MeasureArrangeOverride.csv", FileMode.Append))
+            //using (StreamWriter sw = new StreamWriter(aFile))
+            //{
+            //    var timeMiliseconds = DateTime.Now.ToString("hh:mm:ss.fff");
+            //    sw.WriteLine(String.Format("{0}, {1}, MeasureOverride, {2}", nodeName, id, timeMiliseconds));
+            //}
             return base.MeasureOverride(availableSize);
         }
 
@@ -245,8 +251,9 @@ namespace Dynamo.Controls
             {
                 nodeBorder.Width = ViewModel.Width;
                 nodeBorder.Height = ViewModel.Height;
-                nodeBackground.Width = ViewModel.Width;
-
+                nameBackground.Width = ViewModel.Width;
+                Width = ViewModel.Width;
+                Height = ViewModel.Height;
             }
             
 
@@ -911,8 +918,8 @@ namespace Dynamo.Controls
             //{
             //    var nodeView = (sender as NodeView);
             //    var mainGrid = nodeView.ChildrenOfType<Grid>().FirstOrDefault();
-
             //    sw.WriteLine(String.Format("{0}", (nodeView.DataContext as NodeViewModel).OriginalName));
+            //    sw.WriteLine(String.Format("{0},{1},{2},{3},{4} ", "WPF Type", "Name", "Visibility", "Width", "Height"));
 
             //    foreach (var control in mainGrid.Children())
             //    {
@@ -935,7 +942,7 @@ namespace Dynamo.Controls
 
             //        if (string.IsNullOrEmpty(name))
             //            name = "empty";
-            //        sw.WriteLine(String.Format("{0} - {1}, {2},{3},{4} ", name, typeOfElement, visibility, width, height));
+            //        sw.WriteLine(String.Format("{0},{1},{2},{3},{4} ", typeOfElement, name, visibility, width, height));
             //    }
             //}
 
@@ -944,6 +951,123 @@ namespace Dynamo.Controls
                 ViewModel.Width = e.NewSize.Width;
                 ViewModel.Height = e.NewSize.Height;
             }
+        }
+
+        private void logSizeChangedUIElement(FrameworkElement sender, SizeChangedEventArgs e)
+        {
+            //if (sender != null)
+            //{
+            //    var oldSize = e.PreviousSize;
+            //    var newSize = e.NewSize;
+            //    var id = (sender.DataContext as NodeViewModel)?.NodeModel?.GUID.ToString() ?? "No GUID";
+            //    var nodeName = (sender.DataContext as NodeViewModel).OriginalName;
+
+            //    using (FileStream aFile = new FileStream(@"C:\temp\NodeView_ElementsSizeChange.csv", FileMode.Append))
+            //    using (StreamWriter sw = new StreamWriter(aFile))
+            //    {
+            //        sw.WriteLine(String.Format("{0},{1},{2},{3},{4},{5}", sender.GetType().Name, id, sender.Name, nodeName, oldSize.ToString(), newSize.ToString()));
+            //    }
+            //}
+        }
+
+        private void customNodeBorder0_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void customNodeBorder1_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void nameBackground_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void nodeHeaderContent_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void inputPortControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void outputPortControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void centralGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void GlyphStackPanel_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void PresentationGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void nodeBorder_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void nodeColorOverlayZoomIn_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void nodeTransientColorOverlayZoomIn_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void nodeColorOverlayZoomOut_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void zoomGlyphsGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void selectionBorder_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void nodeHoveringStateBorder_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void warningBar_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void expansionBay_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void ASTTextCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
+        }
+
+        private void CustomFunctionCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            logSizeChangedUIElement(sender as FrameworkElement, e);
         }
     }
 }

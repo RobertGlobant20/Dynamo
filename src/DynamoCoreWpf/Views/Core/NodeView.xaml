@@ -826,18 +826,20 @@
                 HorizontalAlignment="Left"
                 Background="Blue" />
 
-        <Canvas Grid.Row="5"
-                Grid.Column="0"
-                Grid.ColumnSpan="3"
-                ClipToBounds="False"
-                Visibility="{Binding ShowDebugASTs, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}">
+        <Canvas x:Name="ASTTextCanvas" Grid.Row="5"
+              SizeChanged="ASTTextCanvas_SizeChanged"
+              Grid.Column="0"
+              Grid.ColumnSpan="3"
+              ClipToBounds="False"
+              Visibility="{Binding ShowDebugASTs, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}">
             <Label HorizontalContentAlignment="Center" Content="{Binding ASTText}" />
-
         </Canvas>
-        <Canvas Grid.Row="3" Canvas.ZIndex="51" 
-                HorizontalAlignment="Left"
-                VerticalAlignment="Bottom"
-                Visibility="{Binding IsCustomFunction, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}">
+        
+        <Canvas x:Name="CustomFunctionCanvas" Grid.Row="3" Canvas.ZIndex="51"
+              SizeChanged="CustomFunctionCanvas_SizeChanged"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Bottom"
+              Visibility="{Binding IsCustomFunction, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}">
             <Polygon Points="0,-15 15,0 0,0" Fill="#E3E3E3"/>
         </Canvas>
     </Grid>
