@@ -175,6 +175,12 @@ namespace Dynamo.ViewModels
         internal event Action<ShowHideFlags, PortViewModel> RequestPortContextMenu;
         internal static event Action<MLNodeClusterAutoCompletionResponse> RequestNodeAutoCompleteViewExtension;
 
+        internal event Action ReportNodeViewReady;
+        internal void OnReportNodeViewReady()
+        {
+            ReportNodeViewReady?.Invoke();
+        }
+
         internal void OnRequestNodeAutoCompleteSearch()
         {
             RequestNodeAutoCompleteSearch?.Invoke();
@@ -993,7 +999,7 @@ namespace Dynamo.ViewModels
             nodeViewModel.NodeLogic.Modified += OnNodeModified;
             lock (Nodes)
             {
-                Nodes.Add(nodeViewModel);
+                Nodes.Add(nodeViewModel);               
             }
             if (nodeViewModel.ErrorBubble != null)
                 Errors.Add(nodeViewModel.ErrorBubble);

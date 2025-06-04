@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Windows;
@@ -69,6 +71,7 @@ namespace Dynamo.Views
 
         static internal event Action<Window, ViewModelBase> RequesNodeAutoCompleteBar;
         private double currentRenderScale = -1;
+        private int nodeViewsCounter = 0;
 
         public WorkspaceViewModel ViewModel
         {
@@ -135,6 +138,7 @@ namespace Dynamo.Views
             ViewModel.RequestShowInCanvasSearch -= ShowHideInCanvasControl;
             ViewModel.RequestHideAllPopup -= HideAllPopUp;
             ViewModel.RequestNodeAutoCompleteSearch -= ShowNodeAutoCompleteControl;
+            ViewModel.ReportNodeViewReady -= ViewModel_ReportNodeViewReady;
             ViewModel.RequestNodeAutoCompleteBar -= ShowNodeAutoCompleteBar;
             ViewModel.RequestPortContextMenu -= ShowHidePortContextMenu;
             ViewModel.DynamoViewModel.PropertyChanged -= ViewModel_PropertyChanged;
@@ -167,6 +171,7 @@ namespace Dynamo.Views
             ViewModel.RequestShowInCanvasSearch += ShowHideInCanvasControl;
             ViewModel.RequestHideAllPopup += HideAllPopUp;
             ViewModel.RequestNodeAutoCompleteSearch += ShowNodeAutoCompleteControl;
+            ViewModel.ReportNodeViewReady += ViewModel_ReportNodeViewReady;
             ViewModel.RequestNodeAutoCompleteBar += ShowNodeAutoCompleteBar;
             ViewModel.RequestPortContextMenu += ShowHidePortContextMenu;
             ViewModel.DynamoViewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -186,6 +191,24 @@ namespace Dynamo.Views
             ViewModel.Model.CurrentOffsetChanged += vm_CurrentOffsetChanged;
             DynamoSelection.Instance.Selection.CollectionChanged += OnSelectionCollectionChanged;
             infiniteGridView.AttachToZoomBorder(zoomBorder);
+        }
+
+        private void ViewModel_ReportNodeViewReady()
+        {
+            nodeViewsCounter++;
+            if (ViewModel.Nodes.Count == nodeViewsCounter)
+            {
+                WorkspaceModel.nodesTimer.Stop();
+                TimeSpan timeTaken = WorkspaceModel.nodesTimer.Elapsed;
+                //string foo = string.Format("Time: {0}h {1}m {2}s {3}ms", timeTaken.Hours, timeTaken.Minutes, timeTaken.Seconds, timeTaken.Milliseconds);
+
+                ////var timeMiliseconds = DateTime.Now.ToString("hh_mm_ss_fff");
+                //using (FileStream aFile = new FileStream(@"C:\temp\graph_measure_time.txt", FileMode.Append))
+                //using (StreamWriter sw = new StreamWriter(aFile))
+                //{
+                //    sw.WriteLine(String.Format("FileName: {0} {1}", ViewModel.Model.FileName, foo));
+                //}
+            }
         }
 
         private void ShowNodeAutoCompleteControl()

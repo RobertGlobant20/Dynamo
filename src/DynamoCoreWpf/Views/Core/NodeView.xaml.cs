@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -176,6 +177,49 @@ namespace Dynamo.Controls
             }
         }
 
+        protected override Size ArrangeOverride(Size finalSize)
+        {
+            //var nodeView = (this as NodeView);
+            //var nodeName = "";
+            //var id = "";
+            //if (nodeView != null)
+            //{
+            //    nodeName = (nodeView.DataContext as NodeViewModel).OriginalName;
+            //    id = (nodeView.DataContext as NodeViewModel).NodeModel.GUID.ToString();
+            //}
+
+            //using (FileStream aFile = new FileStream(@"C:\temp\NodeView_MeasureArrangeOverride.csv", FileMode.Append))
+            //using (StreamWriter sw = new StreamWriter(aFile))
+            //{
+            //    var timeMiliseconds = DateTime.Now.ToString("hh:mm:ss.fff");
+            //    //sw.WriteLine(String.Format("{0}, ArrangeOverride {1}, {2}, {3}", nodeName, finalSize.Width, finalSize.Height, timeMiliseconds));
+            //    sw.WriteLine(String.Format("{0}, {1}, ArrangeOverride, {2}", nodeName, id, timeMiliseconds));
+            //}
+            return base.ArrangeOverride(finalSize);
+        }
+
+        protected override Size MeasureOverride(Size availableSize)
+        {
+            //var nodeView = (this as NodeView);
+            //var nodeName = "";
+            //var id = "";
+            //if (nodeView != null)
+            //{
+            //    nodeName = (nodeView.DataContext as NodeViewModel).OriginalName;
+            //    id = (nodeView.DataContext as NodeViewModel).NodeModel.GUID.ToString();
+            //}
+
+
+
+            //using (FileStream aFile = new FileStream(@"C:\temp\NodeView_MeasureArrangeOverride.csv", FileMode.Append))
+            //using (StreamWriter sw = new StreamWriter(aFile))
+            //{
+            //    var timeMiliseconds = DateTime.Now.ToString("hh:mm:ss.fff");
+            //    sw.WriteLine(String.Format("{0}, {1}, MeasureOverride, {2}", nodeName, id, timeMiliseconds));
+            //}
+            return base.MeasureOverride(availableSize);
+        }
+
         /// <summary>
         /// This event handler is called soon as the NodeViewModel is bound to this 
         /// NodeView, which happens way before OnNodeViewLoaded event is sent. 
@@ -197,6 +241,18 @@ namespace Dynamo.Controls
             if (null != ViewModel) return;
 
             ViewModel = e.NewValue as NodeViewModel;
+
+            //This code should be only executed when loading a graph is the node is being added to the workspace manually then the Width and Height should be auto-calculated.
+            //The default Width and Height values for nodes is 100
+            if (ViewModel.Width > 100 && ViewModel.Height > 100)
+            {
+                nodeBorder.Width = ViewModel.Width;
+                nodeBorder.Height = ViewModel.Height;
+                nameBackground.Width = ViewModel.Width;
+                Width = ViewModel.Width;
+                Height = ViewModel.Height;
+            }
+
             if (!ViewModel.PreferredSize.HasValue) return;
 
             var size = ViewModel.PreferredSize.Value;
@@ -223,6 +279,7 @@ namespace Dynamo.Controls
             ViewModel.NodeLogic.PropertyChanged += NodeLogic_PropertyChanged;
             ViewModel.NodeModel.ConnectorAdded += NodeModel_ConnectorAdded;
             MouseLeave += NodeView_MouseLeave;
+            ViewModel.WorkspaceViewModel.OnReportNodeViewReady();
         }
 
         private void NodeModel_ConnectorAdded(Graph.Connectors.ConnectorModel obj)
@@ -851,5 +908,13 @@ namespace Dynamo.Controls
             e.Handled = true;
         }
 
+        private void topControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (e.NewSize != null && ViewModel != null)
+            {
+                ViewModel.Width = e.NewSize.Width;
+                ViewModel.Height = e.NewSize.Height;
+            }
+        }
     }
 }

@@ -2444,6 +2444,8 @@ namespace Dynamo.Models
                 CustomNodeManager.AddUninitializedCustomNodesInPath(Path.GetDirectoryName(filePath), IsTestMode);
             }
 
+            WorkspaceModel.nodesTimer.Start();
+
             var currentHomeSpace = Workspaces.OfType<HomeWorkspaceModel>().FirstOrDefault();
             currentHomeSpace.UndefineCBNFunctionDefinitions();
 
