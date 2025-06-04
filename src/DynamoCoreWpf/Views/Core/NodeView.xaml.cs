@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Dynamo.Configuration;
+using Dynamo.Graph;
 using Dynamo.Graph.Nodes;
 using Dynamo.Selection;
 using Dynamo.UI;
@@ -199,8 +200,8 @@ namespace Dynamo.Controls
             ViewModel = e.NewValue as NodeViewModel;
 
             //This code should be only executed when loading a graph, if the node is being added to the workspace manually then the Width and Height should be auto-calculated.
-            //The default Width and Height values for nodes is 100 so only should be executed on graph loading
-            if (ViewModel.Width > 100 && ViewModel.Height > 100)
+            //The default Width and Height values for nodes is 100 so only should be executed on graph loading if both values are 100
+            if (ViewModel.Width > NodeModel.DefaultWidth && ViewModel.Height > NodeModel.DefaultHeight)
             {
                 nodeBorder.Width = ViewModel.Width;
                 nodeBorder.Height = ViewModel.Height;

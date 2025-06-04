@@ -71,13 +71,16 @@ namespace Dynamo.Graph
         /// </summary>
         public event EventHandler<CancelEventArgs> DeletionStarted;
 
+        internal static readonly double DefaultHeight = 100;
+        internal static readonly double DefaultWidth = 100;
+
         private Guid guid;
         private bool isSelected;
         private bool belongsToGroup;
         private double x;
         private double y;
-        private double height = 100;
-        private double width = 100;
+        private double height = DefaultHeight;
+        private double width = DefaultWidth;
 
         /// <summary>
         /// X coordinate of center point.
