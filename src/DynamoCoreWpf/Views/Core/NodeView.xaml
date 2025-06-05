@@ -620,6 +620,7 @@
                 Grid.RowSpan="4"
                 Grid.ColumnSpan="3"
                 Margin="-1"
+                SizeChanged="nodeBorder_SizeChanged"
                 BorderBrush="{StaticResource WorkspaceBackgroundHomeBrush}"
                 BorderThickness="1"
                 Canvas.ZIndex="5"

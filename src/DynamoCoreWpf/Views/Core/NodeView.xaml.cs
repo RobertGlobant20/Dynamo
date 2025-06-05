@@ -172,13 +172,13 @@ namespace Dynamo.Controls
         /// <param name="eventArgs"></param>
         private void OnSizeChanged(object sender, EventArgs eventArgs)
         {
-            if (ViewModel == null || ViewModel.PreferredSize.HasValue) return;
+            //if (ViewModel == null || ViewModel.PreferredSize.HasValue) return;
 
-            var size = new[] { ActualWidth, nodeBorder.ActualHeight };
-            if (ViewModel.SetModelSizeCommand.CanExecute(size))
-            {
-                ViewModel.SetModelSizeCommand.Execute(size);
-            }
+            //var size = new[] { ActualWidth, nodeBorder.ActualHeight };
+            //if (ViewModel.SetModelSizeCommand.CanExecute(size))
+            //{
+            //    ViewModel.SetModelSizeCommand.Execute(size);
+            //}
         }
 
         protected override Size ArrangeOverride(Size finalSize)
@@ -250,13 +250,15 @@ namespace Dynamo.Controls
             //The default Width and Height values for nodes is 100
             if (ViewModel.Width > 100 && ViewModel.Height > 100)
             {
-                nodeBorder.Width = ViewModel.Width;
-                nodeBorder.Height = ViewModel.Height;
-                nameBackground.Width = ViewModel.Width;
                 Width = ViewModel.Width;
                 Height = ViewModel.Height;
             }
-            
+            if (ViewModel.WidthBorder > 100 && ViewModel.HeightBorder > 100)
+            {
+                nodeBorder.Width = ViewModel.WidthBorder;
+                nodeBorder.Height = ViewModel.HeightBorder;
+            }
+
 
             if (!ViewModel.PreferredSize.HasValue) return;
 
@@ -1019,6 +1021,11 @@ namespace Dynamo.Controls
         private void nodeBorder_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             logSizeChangedUIElement(sender as FrameworkElement, e);
+            if (e.NewSize != null && ViewModel != null)
+            {
+                ViewModel.WidthBorder = e.NewSize.Width;
+                ViewModel.HeightBorder = e.NewSize.Height;
+            }
         }
 
         private void nodeColorOverlayZoomIn_SizeChanged(object sender, SizeChangedEventArgs e)

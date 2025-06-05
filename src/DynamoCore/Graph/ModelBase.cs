@@ -78,6 +78,8 @@ namespace Dynamo.Graph
         private double y;
         private double height = 100;
         private double width = 100;
+        private double heightBorder = 100;
+        private double widthBorder = 100;
 
         /// <summary>
         /// X coordinate of center point.
@@ -189,6 +191,36 @@ namespace Dynamo.Graph
                 {
                     width = value;
                     //RaisePropertyChanged("Width");
+                }
+            }
+        }
+
+        /// <summary>
+        /// The width of the object.
+        /// </summary>
+        public virtual double WidthBorder
+        {
+            get { return widthBorder; }
+            set
+            {
+                if (value > 0)
+                {
+                    widthBorder = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The height of the object.
+        /// </summary>
+        public virtual double HeightBorder
+        {
+            get { return heightBorder; }
+            set
+            {
+                if (value > 0)
+                {
+                    heightBorder = value;
                 }
             }
         }
