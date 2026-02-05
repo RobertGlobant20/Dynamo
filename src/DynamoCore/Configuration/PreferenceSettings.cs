@@ -1524,5 +1524,10 @@ namespace Dynamo.Configuration
             get { return isCreatedFromValidFile; }
         }
 
+        /// <summary>
+        /// Gets or sets whether Dynamo should show notifications about unsafe "Trusted Locations" (e.g. locations under ProgramData).
+        /// Default is true to preserve existing behavior.
+        /// </summary>
+        public bool EnableUnTrustedLocationsNotifications { get;set;} = true;
     }
 }

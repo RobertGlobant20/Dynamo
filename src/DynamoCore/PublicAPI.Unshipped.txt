@@ -196,6 +196,8 @@ Dynamo.Configuration.PreferenceSettings.IsMLAutocompleteTOUApproved.set -> void
 Dynamo.Configuration.PreferenceSettings.IsTimeStampIncludedInExportFilePath.get -> bool
 Dynamo.Configuration.PreferenceSettings.IsTimeStampIncludedInExportFilePath.set -> void
 Dynamo.Configuration.PreferenceSettings.IsTrustedLocation(string location) -> bool
+Dynamo.Configuration.PreferenceSettings.EnableUnTrustedLocationsNotifications.get -> bool
+Dynamo.Configuration.PreferenceSettings.EnableUnTrustedLocationsNotifications.set -> void
 Dynamo.Configuration.PreferenceSettings.LibraryWidth.get -> int
 Dynamo.Configuration.PreferenceSettings.LibraryWidth.set -> void
 Dynamo.Configuration.PreferenceSettings.LibraryZoomScale.get -> int
