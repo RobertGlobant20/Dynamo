@@ -260,6 +260,7 @@ Dynamo.Configuration.PreferenceSettings.ShowRunPreview.get -> bool
 Dynamo.Configuration.PreferenceSettings.ShowRunPreview.set -> void
 Dynamo.Configuration.PreferenceSettings.ShowTabsAndSpacesInScriptEditor.get -> bool
 Dynamo.Configuration.PreferenceSettings.ShowTabsAndSpacesInScriptEditor.set -> void
+Dynamo.Configuration.PreferenceSettings.EnableUnTrustedLocationsNotifications.get -> bool
 Dynamo.Configuration.PreferenceSettings.StaticFields() -> System.Collections.Generic.List<string>
 Dynamo.Configuration.PreferenceSettings.TemplateFilePath.get -> string
 Dynamo.Configuration.PreferenceSettings.TemplateFilePath.set -> void
