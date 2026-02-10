@@ -745,8 +745,12 @@ namespace Dynamo.Models
 
             if (PreferenceSettings != null)
             {
-                // Pass EnableUnTrustedLocationsNotifications from config to PreferenceSettings
-                PreferenceSettings.EnableUnTrustedLocationsNotifications = config.EnableUnTrustedLocationsNotifications;
+                // Only allow the configuration to explicitly enable notifications.
+                // Do not let a default-false configuration value disable them unintentionally.
+                if (config.EnableUnTrustedLocationsNotifications)
+                {
+                    PreferenceSettings.EnableUnTrustedLocationsNotifications = true;
+                }
                 SetUICulture(CLILocale ?? PreferenceSettings.Locale);
                 PreferenceSettings.PropertyChanged += PreferenceSettings_PropertyChanged;
                 PreferenceSettings.MessageLogged += LogMessage;
