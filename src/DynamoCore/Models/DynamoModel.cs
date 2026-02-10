@@ -638,7 +638,7 @@ namespace Dynamo.Models
             /// When true (default), notifications are shown in the notification center.
             /// When false, no notifications are displayed for untrusted locations.
             /// </summary>
-            public bool EnableUnTrustedLocationsNotifications { get; set; } = true;
+            public bool EnableUnTrustedLocationsNotifications { get; set; }
         }
 
         /// <summary>
