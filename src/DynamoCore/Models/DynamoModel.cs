@@ -550,7 +550,7 @@ namespace Dynamo.Models
             /// <summary>
             /// Enables or disables notifications about untrusted file locations.
             /// When true (default), notifications are shown in the notification center when trusted locations
-            /// contain paths pointing to ProgramData or other unsafe locations.
+            /// contain paths pointing to the common application data (ProgramData) directory.
             /// When false, no notifications are displayed for untrusted locations.
             /// Default value is true to maintain backward compatibility.
             /// Note: This does not affect the file trust warning popup when opening files from untrusted locations.
