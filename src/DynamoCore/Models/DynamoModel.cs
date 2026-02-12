@@ -638,7 +638,14 @@ namespace Dynamo.Models
             /// When true (default), notifications are shown in the notification center.
             /// When false, no notifications are displayed for untrusted locations.
             /// </summary>
-            public bool EnableUnTrustedLocationsNotifications { get; set; }
+            public bool EnableUnTrustedLocationsNotifications { get; set; } = true;
+
+            /// <summary>
+            /// Initializes a new instance of the DefaultStartConfiguration struct.
+            /// </summary>
+            public DefaultStartConfiguration()
+            {
+            }
         }
 
         /// <summary>
@@ -745,12 +752,8 @@ namespace Dynamo.Models
 
             if (PreferenceSettings != null)
             {
-                // Only allow the configuration to explicitly enable notifications.
-                // Do not let a default-false configuration value disable them unintentionally.
-                if (config.EnableUnTrustedLocationsNotifications)
-                {
-                    PreferenceSettings.EnableUnTrustedLocationsNotifications = true;
-                }
+                // Pass EnableUnTrustedLocationsNotifications from config to PreferenceSettings
+                PreferenceSettings.EnableUnTrustedLocationsNotifications = config.EnableUnTrustedLocationsNotifications;
                 SetUICulture(CLILocale ?? PreferenceSettings.Locale);
                 PreferenceSettings.PropertyChanged += PreferenceSettings_PropertyChanged;
                 PreferenceSettings.MessageLogged += LogMessage;
