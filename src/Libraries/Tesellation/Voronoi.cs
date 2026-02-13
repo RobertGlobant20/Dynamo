@@ -23,21 +23,8 @@ namespace Tessellation
             if (uvList == null || uvList.Count == 0 || face == null)
                 yield break;
 
-            // Physical scale per unit U/V (affine for planar Rectangle->Surface.ByPatch)
-            var p00 = face.PointAtParameter(0, 0);
-            var p10 = face.PointAtParameter(1, 0);
-            var p01 = face.PointAtParameter(0, 1);
-
-            var scaleU = p00.DistanceTo(p10);
-            var scaleV = p00.DistanceTo(p01);
-
-            // Normalize scales to keep values in a reasonable range, preserve aspect ratio
-            var max = System.Math.Max(scaleU, scaleV);
-            if (max <= 1e-9) max = 1.0;
-            var normU = scaleU / max;
-            var normV = scaleV / max;
-            if (normU <= 1e-9) normU = 1.0;
-            if (normV <= 1e-9) normV = 1.0;
+            // Get normalized UV scaling factors to handle anisotropic parameter spaces
+            var (normU, normV) = Delaunay.GetNormalizedUvScales(face);
 
             // Anisotropic scaling only by aspect ratio
             var verts = uvList.Select(uv => new Vertex2(uv.U * normU, uv.V * normV)).ToList();

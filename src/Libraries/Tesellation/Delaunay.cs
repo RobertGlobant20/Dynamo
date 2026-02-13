@@ -12,17 +12,13 @@ namespace Tessellation
     public static class Delaunay
     {
         /// <summary>
-        ///     Creates a Delaunay triangulation of a surface with a given set of UV parameters.
+        ///     Computes normalized UV scaling factors for a surface to handle anisotropic parameter spaces.
+        ///     The scaling preserves the aspect ratio while keeping values in a reasonable numerical range.
         /// </summary>
-        /// <param name="uvs">Set of UV parameters.</param>
-        /// <param name="face">Surface to triangulate.</param>
-        /// <search>uvs</search>
-        public static IEnumerable<Curve> ByParametersOnSurface(IEnumerable<UV> uvs, Surface face)
+        /// <param name="face">Surface to compute scaling factors for.</param>
+        /// <returns>Tuple containing normalized U and V scale factors.</returns>
+        internal static (double normU, double normV) GetNormalizedUvScales(Surface face)
         {
-            var uvList = uvs?.ToList();
-            if (uvList == null || uvList.Count == 0 || face == null)
-                yield break;
-
             // Physical scale per unit U/V (affine for planar Rectangle->Surface.ByPatch)
             var p00 = face.PointAtParameter(0, 0);
             var p10 = face.PointAtParameter(1, 0);
@@ -34,10 +30,29 @@ namespace Tessellation
             // Normalize scales to keep values in a reasonable range, preserve aspect ratio
             var max = System.Math.Max(scaleU, scaleV);
             if (max <= 1e-9) max = 1.0;
+            
             var normU = scaleU / max;
             var normV = scaleV / max;
+            
             if (normU <= 1e-9) normU = 1.0;
             if (normV <= 1e-9) normV = 1.0;
+
+            return (normU, normV);
+        }
+        /// <summary>
+        ///     Creates a Delaunay triangulation of a surface with a given set of UV parameters.
+        /// </summary>
+        /// <param name="uvs">Set of UV parameters.</param>
+        /// <param name="face">Surface to triangulate.</param>
+        /// <search>uvs</search>
+        public static IEnumerable<Curve> ByParametersOnSurface(IEnumerable<UV> uvs, Surface face)
+        {
+            var uvList = uvs?.ToList();
+            if (uvList == null || uvList.Count == 0 || face == null)
+                yield break;
+
+            // Get normalized UV scaling factors to handle anisotropic parameter spaces
+            var (normU, normV) = GetNormalizedUvScales(face);
 
             // Build Delaunay in anisotropically scaled (u*normU, v*normV) space.
             var verts = uvList.Select(uv => new Vertex2(uv.U * normU, uv.V * normV)).ToList();
