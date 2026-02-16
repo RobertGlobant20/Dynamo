@@ -22,7 +22,6 @@ namespace DynamoCoreWpfTests.ViewExtensions
         {
             // Get the ProgramData path
             programDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            // Intentionally not calling base setup here because DynamoTestUIBase does not expose a Setup method.
         }
 
         [Test]
