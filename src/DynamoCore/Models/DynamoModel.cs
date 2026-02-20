@@ -1960,7 +1960,8 @@ namespace Dynamo.Models
         }
 
         /// <summary>
-        /// This warning message is displayed on the node associated with the FFI dll
+        /// This warning message is displayed on the node associated with the FFI dll.
+        /// Warning messages are always displayed regardless of workspace version.
         /// </summary>
         /// <param name="args"></param>
         private void LogWarningMessage(LogWarningMessageEventArgs args)
@@ -1970,13 +1971,35 @@ namespace Dynamo.Models
         }
 
         /// <summary>
-        /// This info message is displayed on the node associated with the FFI dll
+        /// This info message is displayed on the node associated with the FFI dll.
+        /// Info messages are filtered based on workspace version if IntroducedInVersion is specified.
         /// </summary>
         /// <param name="args"></param>
         private void LogInfoMessage(LogWarningMessageEventArgs args)
         {
+            if (!ShouldLogVersionedInfoMessage(args))
+                return;
             Validity.Assert(EngineController.LiveRunnerRuntimeCore != null);
             EngineController.LiveRunnerRuntimeCore.RuntimeStatus.LogInfo(InfoID.Default, args.message);
+        }
+
+        private bool ShouldLogVersionedInfoMessage(LogWarningMessageEventArgs args)
+        {
+            if (CurrentWorkspace == null)
+                return false;
+
+            if (string.IsNullOrEmpty(CurrentWorkspace.FileName))
+                return false;
+
+            var introducedInVersion = args?.IntroducedInVersion;
+            if (introducedInVersion == null)
+                return true;
+
+            var workspaceVersion = EngineController.CurrentWorkspaceVersion;
+            if (workspaceVersion == null)
+                return true;
+
+            return workspaceVersion < introducedInVersion;
         }
 
         #endregion
@@ -2092,7 +2115,11 @@ namespace Dynamo.Models
         {
             Logger.Log("Beginning engine reset");
 
+            // Save the workspace version before resetting the engine
+            var workspaceVersion = EngineController.CurrentWorkspaceVersion;
             ResetEngine(true);
+            // Restore the workspace version after engine reset
+            EngineController.CurrentWorkspaceVersion = workspaceVersion;
 
             Logger.Log("Reset complete");
 
@@ -2475,7 +2502,12 @@ namespace Dynamo.Models
                 // TODO: #4258
                 // Remove this ResetEngine call when multiple home workspaces is supported.
                 // This call formerly lived in DynamoViewModel
+                
+                // Save the workspace version before resetting the engine
+                var workspaceVersion = EngineController.CurrentWorkspaceVersion;
                 ResetEngine(false);
+                // Restore the workspace version after engine reset
+                EngineController.CurrentWorkspaceVersion = workspaceVersion;
 
                 if (hws.RunSettings.RunType == RunType.Periodic)
                 {
